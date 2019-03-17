@@ -1,12 +1,12 @@
 ---
 # iptables setup
-- name: IPTABLES - Install iptables-persistent
+- name: Install iptables-persistent
   apt:
           name: iptables-persistent
           state: latest
 
 #sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-- name: IPTABLES - Allow current SSH connection
+- name: Allow current SSH connection
   iptables:
           chain: INPUT
           match: conntrack
@@ -14,7 +14,7 @@
           jump: ACCEPT
 
 #sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-- name: IPTABLES - Allow SSH connections
+- name: Allow SSH connections
   iptables:
           chain: INPUT
           protocol: tcp
@@ -23,7 +23,7 @@
 
 
 #sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-- name: IPTABLES - Allow HTTP connections
+- name: Allow HTTP connections
   iptables:
           chain: INPUT
           protocol: tcp
@@ -31,7 +31,7 @@
           jump: ACCEPT
 
 #sudo iptables -A INPUT -p tcp --dport 19999 -j ACCEPT
-- name: IPTABLES - Allow Netdata from internal network
+- name: Allow Netdata from internal network
   iptables:
           chain: INPUT
           protocol: tcp
@@ -40,7 +40,7 @@
           jump: ACCEPT
 
 #sudo iptables -A INPUT -p udp --dport 1194 -j ACCEPT
-- name: IPTABLES - Allow OpenVPN connections
+- name: Allow OpenVPN connections
   iptables:
           chain: INPUT
           protocol: udp
@@ -48,7 +48,7 @@
           jump: ACCEPT
 
 #sudo iptables -I INPUT 1 -i lo -j ACCEPT
-- name: IPTABLES - Allow loopback connections
+- name: Allow loopback connections
   iptables:
           chain: INPUT
           in_interface: lo
@@ -57,14 +57,13 @@
           rule_num: 1
 
 #sudo iptables -P INPUT DROP
-- name: IPTABLES - Drop any remaining packets
+- name: Drop any remaining packets
   iptables:
           chain: INPUT
           jump: DROP
 
-#sudo invoke-rc.d iptables-persistent save
-- name: IPTABLES - Persist iptables rules
-  block:
-          - command: netfilter-persistent save
-
-          - command: netfilter-persistent reload
+- name: netfilter-persistent save
+  command: netfilter-persistent save
+  
+- name: netfilter-persistent reload
+  command: netfilter-persistent reload
