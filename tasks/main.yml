@@ -36,8 +36,11 @@
           chain: INPUT
           protocol: tcp
           destination_port: 19999
-          source: 10.1.0.0/24
+          source: "{{ item }}"
           jump: ACCEPT
+  with_items:
+          - 10.0.0.0/24
+          - 10.1.0.0/24
 
 #sudo iptables -A INPUT -p udp --dport 1194 -j ACCEPT
 - name: Allow OpenVPN connections
